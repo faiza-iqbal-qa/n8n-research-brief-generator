@@ -23,7 +23,6 @@ For each URL, the workflow fills:
 - Strategic Risks
 - Opportunities
 - LinkedIn Angles
-…and sets:
 - Processed = YES
 
 ## Workflow logic (high level)
@@ -57,3 +56,15 @@ The workflow only calls Claude for rows where Processed is blank. Once a row is 
 - Cleaner article extraction (remove navigation/footer)
 - Better error logging + retries
 - Deduplicate repeated URLs
+
+## How to Run This
+
+1. Import `workflow.json` into n8n
+2. Create a Google Sheet using `sheet_template.csv`
+3. Connect Google Sheets credential in n8n
+4. Connect Anthropic (Claude) API credential
+5. Set Schedule Trigger (e.g., every 15 minutes)
+6. Add URLs into the sheet
+7. Activate the workflow
+
+Rows with blank `Processed` will be summarized and marked as `YES
