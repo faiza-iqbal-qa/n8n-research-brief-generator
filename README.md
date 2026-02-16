@@ -1,12 +1,11 @@
-n8n Research Brief Generator (Iteration 2)
+n8n Research Brief Generator – Iteration 2
 
 This project started as a simple experiment:
 
-Can a Google Sheet become a lightweight AI research engine?
+Can a Google Sheet act as a lightweight AI research engine?
 
-Version 1 proved it could.
-
-Version 2 focuses on making it behave like a system, not a demo.
+Version 1 proved it works.
+Version 2 focuses on reliability and system behavior.
 
 What It Does
 
@@ -16,7 +15,7 @@ Fetches the article via HTTP
 
 Generates a structured brief using an LLM
 
-Writes results back into the sheet
+Writes results back into separate columns
 
 Tracks row state (PROCESSING → DONE / FAILED)
 
@@ -24,52 +23,42 @@ Prevents duplicate processing
 
 Increments attempt counters
 
-Handles invalid URLs gracefully
-
-What Changed in v2
-
-This iteration improves reliability and structure:
+What Improved in This Iteration
 
 Clear success vs failure branching
 
-Outcome-based validation (checks if structured output exists)
+Outcome-based validation (checks for structured output instead of relying on error flags)
 
-Proper row_number matching for stable updates
-
-Attempts tracking
+Stable row matching using row_number
 
 Explicit Status column (PROCESSING / DONE / FAILED)
 
 Controlled batch size (1 row at a time)
 
-The goal was not better prompting.
+This version focuses less on prompting and more on workflow behavior.
 
-The goal was better system behavior.
-
-Workflow Architecture
+Workflow Overview
 
 Schedule Trigger
 → Get rows from Google Sheets
 → Filter unprocessed rows
 → Loop Over Items (batch size = 1)
 → Mark row as PROCESSING
-→ HTTP Request (fetch article)
-→ Clean/transform content
-→ Message a Model (LLM)
-→ IF (check if structured output exists)
+→ HTTP Request
+→ Transform content
+→ Message a Model
+→ IF (validate structured output)
 
-True branch (Success):
+If success:
 → Update sheet with structured brief
 → Mark DONE + Processed = YES
 
-False branch (Failure):
-→ Update sheet with FAILED status
+If failure:
+→ Mark FAILED
 → Log error
 → Increment attempts
 
-Google Sheet Structure
-
-The sheet must contain the following columns:
+Required Google Sheet Columns
 
 row_number
 
@@ -95,10 +84,6 @@ Last run
 
 Error
 
-A template file is included:
-
-sheet-template.csv
-
 Tech Stack
 
 n8n (Cloud)
@@ -107,36 +92,20 @@ Google Sheets
 
 HTTP Request Node
 
-LLM via “Message a Model”
+LLM via Message a Model
 
-JavaScript transformation node
+JavaScript transformation nodes
 
 How To Run
 
-Import the workflow JSON into n8n
+Import workflow JSON into n8n
 
-Create a Google Sheet using sheet-template.csv
+Create Google Sheet using sheet-template.csv
 
-Connect Google Sheets credentials
-
-Connect your LLM provider credentials
+Connect credentials
 
 Execute workflow
 
 Add URLs to test
 
-What This Demonstrates
-
-Practical AI workflow automation
-
-State-driven design
-
-Idempotent processing
-
-Failure-safe branching
-
-Iterative system improvement
-
-This repository reflects the second iteration after identifying weaknesses in the original design.
-
-Still refining. Still learning.
+Built while iterating and learning in public.
