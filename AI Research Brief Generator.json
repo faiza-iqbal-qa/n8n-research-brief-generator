@@ -5,10 +5,7 @@
       "parameters": {
         "rule": {
           "interval": [
-            {
-              "field": "minutes",
-              "minutesInterval": 10
-            }
+            {}
           ]
         }
       },
@@ -25,8 +22,10 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "mode": "id",
-          "value": "1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk"
+          "value": "1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk",
+          "mode": "list",
+          "cachedResultName": "Copy of AI Research Brief Generator - copy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
@@ -109,13 +108,13 @@
     },
     {
       "parameters": {
-        "url": "={{$json[\"URL\"]}}",
+        "url": "={{$node[\"Loop Over Items\"].json[\"URL\"]}}\n\n",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        800,
+        944,
         16
       ],
       "id": "a2d2feda-42ac-4ffb-9ca0-3e8e5678b803",
@@ -139,7 +138,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1040,
+        1120,
         16
       ],
       "id": "b4e898dd-866e-40a3-b4e1-1eb5f61e5b25",
@@ -165,13 +164,14 @@
       "type": "@n8n/n8n-nodes-langchain.anthropic",
       "typeVersion": 1,
       "position": [
-        1216,
+        1456,
         16
       ],
       "id": "9695b5b5-ebec-4eeb-96ea-646cd9d83319",
       "name": "Message a model",
       "retryOnFail": true,
       "alwaysOutputData": true,
+      "waitBetweenTries": 5000,
       "credentials": {
         "anthropicApi": {
           "id": "CxLHp6tXptZ5V2cf",
@@ -186,8 +186,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1520,
-        16
+        1920,
+        -272
       ],
       "id": "564ebdfa-d495-4ffe-adbb-8a71434aa039",
       "name": "Code in JavaScript"
@@ -307,11 +307,380 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1760,
-        16
+        2080,
+        -560
       ],
       "id": "90f37003-e45e-40e1-9a4b-1780205d0fd7",
       "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FMDnayG2maj5XcFn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk",
+          "mode": "list",
+          "cachedResultName": "Copy of AI Research Brief Generator - copy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1192733904,
+          "mode": "list",
+          "cachedResultName": "Copy of Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk/edit#gid=1192733904"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{$json.row_number}}",
+            "Status": "PROCESSING",
+            "Last run": "={{ new Date().toISOString() }}",
+            "Attempts": "={{ (Number($json.Attempts || 0) + 1).toString() }}\n"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Executive Summary",
+              "displayName": "Executive Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Key Themes",
+              "displayName": "Key Themes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Strategic Risks",
+              "displayName": "Strategic Risks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Opportunities",
+              "displayName": "Opportunities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn Angles",
+              "displayName": "LinkedIn Angles",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Processed",
+              "displayName": "Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempts",
+              "displayName": "Attempts",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last run",
+              "displayName": "Last run",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Error",
+              "displayName": "Error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        16
+      ],
+      "id": "748aa796-a75d-4ff4-a6ca-431444f482e7",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FMDnayG2maj5XcFn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = ($json.data || \"\").toString();\n\n// remove scripts/styles\nlet text = html\n  .replace(/<script[\\s\\S]*?<\\/script>/gi, \" \")\n  .replace(/<style[\\s\\S]*?<\\/style>/gi, \" \");\n\n// remove tags\ntext = text.replace(/<\\/?[^>]+(>|$)/g, \" \");\n\n// decode common entities (light)\ntext = text\n  .replace(/&nbsp;/g, \" \")\n  .replace(/&amp;/g, \"&\")\n  .replace(/&quot;/g, '\"')\n  .replace(/&#39;/g, \"'\")\n  .replace(/&lt;/g, \"<\")\n  .replace(/&gt;/g, \">\");\n\n// collapse whitespace\ntext = text.replace(/\\s+/g, \" \").trim();\n\n// cap length for model\ntext = text.slice(0, 12000);\n\nreturn [{ json: { ...$json, articleText: text } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        16
+      ],
+      "id": "f608a7a8-459f-4fc5-a20f-a8b55154fc2b",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7257332f-699c-47c1-9901-0249be5b1de4",
+              "leftValue": "={{ $json[\"Executive Summary\"] }}\n",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        -112
+      ],
+      "id": "0c76d5b5-c4ea-4ec9-a1db-da2ae239d5d5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk",
+          "mode": "list",
+          "cachedResultName": "Copy of AI Research Brief Generator - copy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1192733904,
+          "mode": "list",
+          "cachedResultName": "Copy of Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EEc6nu_nj3-cnX9Q3a0xwa-zULNw1_ilmYQCzckKEvk/edit#gid=1192733904"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ Number($node[\"Loop Over Items\"].json[\"row_number\"]) }}\n",
+            "Status": "FAILED",
+            "Error": "={{ $node[\"HTTP Request\"].json?.error?.message || $node[\"HTTP Request\"].json?.message || \"Request failed / invalid URL\" }}\n",
+            "Last run": "={{ new Date().toISOString() }}\n",
+            "Attempts": "={{ Number($node[\"Loop Over Items\"].json[\"Attempts\"] || 0) + 1 }}\n"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Executive Summary",
+              "displayName": "Executive Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Key Themes",
+              "displayName": "Key Themes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Strategic Risks",
+              "displayName": "Strategic Risks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Opportunities",
+              "displayName": "Opportunities",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "LinkedIn Angles",
+              "displayName": "LinkedIn Angles",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Processed",
+              "displayName": "Processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempts",
+              "displayName": "Attempts",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last run",
+              "displayName": "Last run",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Error",
+              "displayName": "Error",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2096,
+        48
+      ],
+      "id": "e5bbd658-f9be-4287-9e9a-dc3bb279a8c1",
+      "name": "Update row in sheet2",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "FMDnayG2maj5XcFn",
@@ -360,7 +729,7 @@
         [],
         [
           {
-            "node": "HTTP Request",
+            "node": "Update row in sheet1",
             "type": "main",
             "index": 0
           }
@@ -382,7 +751,7 @@
       "main": [
         [
           {
-            "node": "Message a model",
+            "node": "Code in JavaScript1",
             "type": "main",
             "index": 0
           }
@@ -393,7 +762,7 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript",
+            "node": "If1",
             "type": "main",
             "index": 0
           }
@@ -421,6 +790,46 @@
           }
         ]
       ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -429,7 +838,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "e5c4a151-15ea-4ef1-9b6b-90693d1e57b4",
+  "versionId": "1ffe59e6-c884-48e3-b69d-a47888f70ff4",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "4a81b88bde22ef14082e6bb15f21c470fd95f13d34369e3894eeafbc3dc5d0a8"

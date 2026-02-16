@@ -1,70 +1,142 @@
-# AI Research Brief Generator (n8n + Claude + Google Sheets)
+n8n Research Brief Generator (Iteration 2)
 
-## What this does
-Paste article URLs into a Google Sheet. The workflow fetches each URL, generates a structured brief using Claude, and writes the output back into the sheet (Executive Summary, Themes, Risks, Opportunities, LinkedIn angles). It also marks rows as Processed so it doesn’t re-run on the same URLs.
+This project started as a simple experiment:
 
-## Input (Google Sheet columns)
-Create a Google Sheet with these headers in row 1:
+Can a Google Sheet become a lightweight AI research engine?
 
-- URL
-- Executive Summary
-- Key Themes
-- Strategic Risks
-- Opportunities
-- LinkedIn Angles
-- Processed
+Version 1 proved it could.
 
-Add URLs under the URL column. Leave Processed blank.
+Version 2 focuses on making it behave like a system, not a demo.
 
-## Output
-For each URL, the workflow fills:
-- Executive Summary
-- Key Themes
-- Strategic Risks
-- Opportunities
-- LinkedIn Angles
-- Processed = YES
+What It Does
 
-## Workflow logic (high level)
-1. Schedule Trigger runs on an interval (ex: every 15 minutes)
-2. Google Sheets: Get Row(s)
-3. IF: only continue when Processed is empty
-4. Loop Over Items (batch size 1): process rows one at a time
-5. HTTP Request: fetch article HTML
-6. Edit Fields: create `articleText` by trimming the HTML to a safe length
-7. AI (Claude): generate a structured brief with fixed headings
-8. Code node: split the model output into separate sections
-9. Google Sheets: Update Row by matching on `row_number` and writing results back
+Add a URL to a Google Sheet and the workflow:
 
-## Setup
-### 1) Google Sheets
-- Create the sheet with the columns above.
-- Add a few URLs in the URL column.
+Fetches the article via HTTP
 
-### 2) n8n credentials
-- Google Sheets credential (OAuth)
-- Anthropic / Claude API key credential
+Generates a structured brief using an LLM
 
-### 3) Important note on cost control
-The workflow only calls Claude for rows where Processed is blank. Once a row is updated, Processed becomes YES and the row is skipped in future runs.
+Writes results back into the sheet
 
-## Known limitations
-- Some websites block automated requests (403) or return paywalled content.
-- V1 uses raw HTML; results improve if you add better text extraction later.
+Tracks row state (PROCESSING → DONE / FAILED)
 
-## Next improvements
-- Cleaner article extraction (remove navigation/footer)
-- Better error logging + retries
-- Deduplicate repeated URLs
+Prevents duplicate processing
 
-## How to Run This
+Increments attempt counters
 
-1. Import `workflow.json` into n8n
-2. Create a Google Sheet using `sheet_template.csv`
-3. Connect Google Sheets credential in n8n
-4. Connect Anthropic (Claude) API credential
-5. Set Schedule Trigger (e.g., every 15 minutes)
-6. Add URLs into the sheet
-7. Activate the workflow
+Handles invalid URLs gracefully
 
-Rows with blank `Processed` will be summarized and marked as `YES
+What Changed in v2
+
+This iteration improves reliability and structure:
+
+Clear success vs failure branching
+
+Outcome-based validation (checks if structured output exists)
+
+Proper row_number matching for stable updates
+
+Attempts tracking
+
+Explicit Status column (PROCESSING / DONE / FAILED)
+
+Controlled batch size (1 row at a time)
+
+The goal was not better prompting.
+
+The goal was better system behavior.
+
+Workflow Architecture
+
+Schedule Trigger
+→ Get rows from Google Sheets
+→ Filter unprocessed rows
+→ Loop Over Items (batch size = 1)
+→ Mark row as PROCESSING
+→ HTTP Request (fetch article)
+→ Clean/transform content
+→ Message a Model (LLM)
+→ IF (check if structured output exists)
+
+True branch (Success):
+→ Update sheet with structured brief
+→ Mark DONE + Processed = YES
+
+False branch (Failure):
+→ Update sheet with FAILED status
+→ Log error
+→ Increment attempts
+
+Google Sheet Structure
+
+The sheet must contain the following columns:
+
+row_number
+
+URL
+
+Executive Summary
+
+Key Themes
+
+Strategic Risks
+
+Opportunities
+
+LinkedIn Angles
+
+Processed
+
+Status
+
+Attempts
+
+Last run
+
+Error
+
+A template file is included:
+
+sheet-template.csv
+
+Tech Stack
+
+n8n (Cloud)
+
+Google Sheets
+
+HTTP Request Node
+
+LLM via “Message a Model”
+
+JavaScript transformation node
+
+How To Run
+
+Import the workflow JSON into n8n
+
+Create a Google Sheet using sheet-template.csv
+
+Connect Google Sheets credentials
+
+Connect your LLM provider credentials
+
+Execute workflow
+
+Add URLs to test
+
+What This Demonstrates
+
+Practical AI workflow automation
+
+State-driven design
+
+Idempotent processing
+
+Failure-safe branching
+
+Iterative system improvement
+
+This repository reflects the second iteration after identifying weaknesses in the original design.
+
+Still refining. Still learning.
